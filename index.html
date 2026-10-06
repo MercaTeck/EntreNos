@@ -112,6 +112,32 @@ button{font:inherit;color:inherit;background:none;border:none;cursor:pointer}
 .capa{transition:transform .9s cubic-bezier(.2,.8,.3,1)}
 .persona{opacity:0;transform-box:fill-box;transform-origin:center bottom;transform:translateY(26px) scale(.9)}
 .persona.sentada{opacity:1;transform:none;transition:opacity .6s ease,transform .7s cubic-bezier(.3,1.4,.5,1)}
+.persona.sentada{cursor:pointer;outline:none}
+.persona.sentada:hover,.persona.sentada:focus-visible{transform:translateY(-5px)}
+.persona.saluda{animation:saltito .55s cubic-bezier(.3,1.5,.5,1)}
+@keyframes saltito{0%{transform:none}40%{transform:translateY(-12px) scale(1.07)}100%{transform:none}}
+.cara{opacity:0;transition:opacity .35s ease .1s;fill:#140A0D}
+.persona.descubierta .cara{opacity:1}
+.nombre{opacity:0;transition:opacity .4s ease .15s;fill:var(--crema);font-family:var(--f-titulo);
+  font-weight:600;font-size:15px;text-anchor:middle;letter-spacing:-.01em}
+.persona.descubierta .nombre{opacity:1}
+
+/* ---------- Juego de la mesa ---------- */
+.juego{margin-top:14px;text-align:center}
+.juego__pista{font-size:.82rem;color:var(--crema-soft);letter-spacing:.04em;transition:opacity .3s}
+.juego__ficha{min-height:72px;margin-top:10px;display:flex;align-items:center;justify-content:center}
+.ficha{background:var(--noche-2);border:1px solid rgba(242,230,216,.14);border-radius:var(--radio);
+  padding:14px 18px;max-width:420px;width:100%;animation:entra .35s cubic-bezier(.2,.8,.3,1)}
+.ficha__nombre{font-family:var(--f-titulo);font-weight:800;color:var(--blanco);font-size:1.05rem;letter-spacing:-.02em}
+.ficha__bio{font-size:.82rem;color:var(--crema-soft);margin-top:3px}
+.ficha__tags{display:flex;flex-wrap:wrap;gap:7px;justify-content:center;margin-top:10px}
+.ficha__tag{font-size:.78rem;padding:5px 11px;border-radius:999px;
+  background:rgba(242,230,216,.07);border:1px solid rgba(242,230,216,.15)}
+.ficha--final{background:linear-gradient(135deg,rgba(126,31,60,.6),rgba(255,122,77,.16));
+  border-color:rgba(255,122,77,.35)}
+.ficha--final .ficha__nombre{font-size:1.15rem}
+.ficha--final .ficha__tag{background:rgba(255,122,77,.14);border-color:rgba(255,122,77,.35)}
+.ficha__btn{margin-top:14px}
 .lampara{animation:titilar 4s ease-in-out infinite}
 .lampara:nth-of-type(2){animation-delay:-1.3s}
 .lampara:nth-of-type(3){animation-delay:-2.6s}
@@ -356,32 +382,81 @@ button{font:inherit;color:inherit;background:none;border:none;cursor:pointer}
             <stop offset="100%" stop-color="#FFA06B" stop-opacity="0"/>
           </radialGradient>
         </defs>
-        <rect width="460" height="380" fill="url(#luz)"/>
-        <g class="capa" data-prof="6">
-          <g stroke="rgba(242,230,216,.22)" stroke-width="1.5">
-            <line x1="150" y1="0" x2="150" y2="52"/><line x1="230" y1="0" x2="230" y2="36"/><line x1="310" y1="0" x2="310" y2="60"/>
+        <!-- El halo tiene que terminar DENTRO del lienzo, si no se le ve el borde -->
+        <ellipse cx="230" cy="190" rx="229" ry="189" fill="url(#luz)"/>
+
+        <!-- Lámparas colgantes -->
+        <g class="capa" data-prof="7">
+          <g stroke="rgba(242,230,216,.2)" stroke-width="1.5">
+            <line x1="138" y1="0" x2="138" y2="50"/><line x1="230" y1="0" x2="230" y2="34"/><line x1="322" y1="0" x2="322" y2="58"/>
           </g>
-          <circle class="lampara" cx="150" cy="58" r="9" fill="#FFA06B"/>
-          <circle class="lampara" cx="230" cy="42" r="11" fill="#FF7A4D"/>
-          <circle class="lampara" cx="310" cy="66" r="8" fill="#FFA06B"/>
+          <circle class="lampara" cx="138" cy="56" r="8" fill="#FFA06B"/>
+          <circle class="lampara" cx="230" cy="40" r="10" fill="#FF7A4D"/>
+          <circle class="lampara" cx="322" cy="64" r="7" fill="#FFA06B"/>
         </g>
+
+        <!-- Fila de atrás: la mesa les tapa el cuerpo, como en una mesa real.
+             Cada persona lleva un grupo exterior que SOLO guarda la posición
+             y uno interior que se anima; si se mezclan, el CSS pisa la posición. -->
+        <g class="capa" data-prof="-18">
+          <g transform="translate(138,160)"><g class="persona" data-id="0" tabindex="0" role="button" aria-label="Descubrir a esta persona de la mesa">
+            <rect x="-32" y="-44" width="64" height="92" fill="transparent"/>
+            <circle r="20" fill="#F2E6D8"/><path d="M-27 72c0-22 12-37 27-37s27 15 27 37z" fill="#F2E6D8"/>
+            <g class="cara"><circle cx="-6.8" cy="-4" r="2.4"/><circle cx="6.8" cy="-4" r="2.4"/><path d="M-7 4.5q7 6.5 14 0" fill="none" stroke="#140A0D" stroke-width="2.2" stroke-linecap="round"/></g>
+            <text class="nombre" y="-32">Caro</text>
+          </g></g>
+          <g transform="translate(230,150)"><g class="persona" data-id="1" tabindex="0" role="button" aria-label="Descubrir a esta persona de la mesa">
+            <rect x="-32" y="-44" width="64" height="92" fill="transparent"/>
+            <circle r="20" fill="#FF7A4D"/><path d="M-27 72c0-22 12-37 27-37s27 15 27 37z" fill="#FF7A4D"/>
+            <g class="cara"><circle cx="-6.8" cy="-4" r="2.4"/><circle cx="6.8" cy="-4" r="2.4"/><path d="M-7 4.5q7 6.5 14 0" fill="none" stroke="#140A0D" stroke-width="2.2" stroke-linecap="round"/></g>
+            <text class="nombre" y="-32">Nico</text>
+          </g></g>
+          <g transform="translate(322,160)"><g class="persona" data-id="2" tabindex="0" role="button" aria-label="Descubrir a esta persona de la mesa">
+            <rect x="-32" y="-44" width="64" height="92" fill="transparent"/>
+            <circle r="20" fill="#C9B9AC"/><path d="M-27 72c0-22 12-37 27-37s27 15 27 37z" fill="#C9B9AC"/>
+            <g class="cara"><circle cx="-6.8" cy="-4" r="2.4"/><circle cx="6.8" cy="-4" r="2.4"/><path d="M-7 4.5q7 6.5 14 0" fill="none" stroke="#140A0D" stroke-width="2.2" stroke-linecap="round"/></g>
+            <text class="nombre" y="-32">Flor</text>
+          </g></g>
+        </g>
+
+        <!-- La mesa -->
         <g class="capa" data-prof="-10">
-          <ellipse cx="230" cy="248" rx="132" ry="52" fill="#5E1530"/>
-          <ellipse cx="230" cy="240" rx="132" ry="52" fill="#7E1F3C"/>
+          <ellipse cx="230" cy="250" rx="136" ry="54" fill="#5E1530"/>
+          <ellipse cx="230" cy="242" rx="136" ry="54" fill="#7E1F3C"/>
           <g fill="#F2E6D8" opacity=".92">
-            <path d="M196 214h18l-4 14a5 5 0 0 1-10 0z"/><rect x="203" y="228" width="4" height="12" rx="2"/><rect x="197" y="239" width="16" height="3" rx="1.5"/>
-            <path d="M248 210h18l-4 14a5 5 0 0 1-10 0z"/><rect x="255" y="224" width="4" height="14" rx="2"/><rect x="249" y="237" width="16" height="3" rx="1.5"/>
+            <path d="M172 208h17l-3.8 13.4a4.8 4.8 0 0 1-9.4 0z"/><rect x="178.6" y="221" width="3.8" height="11.5" rx="1.9"/><rect x="172.8" y="232" width="15.4" height="2.9" rx="1.45"/>
+            <path d="M271 204h17l-3.8 13.4a4.8 4.8 0 0 1-9.4 0z"/><rect x="277.6" y="217" width="3.8" height="13" rx="1.9"/><rect x="271.8" y="229" width="15.4" height="2.9" rx="1.45"/>
           </g>
         </g>
-        <g class="capa" data-prof="-20">
-          <g class="persona" transform="translate(62,150)"><circle r="22" fill="#F2E6D8"/><path d="M-30 78c0-24 13-40 30-40s30 16 30 40z" fill="#F2E6D8"/></g>
-          <g class="persona" transform="translate(160,112)"><circle r="20" fill="#FF7A4D"/><path d="M-27 72c0-22 12-37 27-37s27 15 27 37z" fill="#FF7A4D"/></g>
-          <g class="persona" transform="translate(300,112)"><circle r="20" fill="#C9B9AC"/><path d="M-27 72c0-22 12-37 27-37s27 15 27 37z" fill="#C9B9AC"/></g>
-          <g class="persona" transform="translate(398,150)"><circle r="22" fill="#F2E6D8"/><path d="M-30 78c0-24 13-40 30-40s30 16 30 40z" fill="#F2E6D8"/></g>
-          <g class="persona" transform="translate(140,278)"><circle r="21" fill="#A62B4E"/><path d="M-28 76c0-23 12-38 28-38s28 15 28 38z" fill="#A62B4E"/></g>
-          <g class="persona" transform="translate(320,278)"><circle r="21" fill="#FFA06B"/><path d="M-28 76c0-23 12-38 28-38s28 15 28 38z" fill="#FFA06B"/></g>
+
+        <!-- Fila de adelante: tapan el borde de la mesa, por eso se ven sentados -->
+        <g class="capa" data-prof="-28">
+          <g transform="translate(118,286)"><g class="persona" data-id="3" tabindex="0" role="button" aria-label="Descubrir a esta persona de la mesa">
+            <rect x="-34" y="-30" width="68" height="120" fill="transparent"/>
+            <circle r="23" fill="#E0B98E"/><path d="M-31 82c0-25 14-42 31-42s31 17 31 42z" fill="#E0B98E"/>
+            <g class="cara"><circle cx="-7.8" cy="-4.5" r="2.8"/><circle cx="7.8" cy="-4.5" r="2.8"/><path d="M-8.2 5.2q8.2 7.4 16.4 0" fill="none" stroke="#140A0D" stroke-width="2.5" stroke-linecap="round"/></g>
+            <text class="nombre" y="-32">Tomás</text>
+          </g></g>
+          <g transform="translate(230,296)"><g class="persona" data-id="4" tabindex="0" role="button" aria-label="Descubrir a esta persona de la mesa">
+            <rect x="-34" y="-30" width="68" height="112" fill="transparent"/>
+            <circle r="23" fill="#A62B4E"/><path d="M-31 82c0-25 14-42 31-42s31 17 31 42z" fill="#A62B4E"/>
+            <g class="cara"><circle cx="-7.8" cy="-4.5" r="2.8"/><circle cx="7.8" cy="-4.5" r="2.8"/><path d="M-8.2 5.2q8.2 7.4 16.4 0" fill="none" stroke="#140A0D" stroke-width="2.5" stroke-linecap="round"/></g>
+            <text class="nombre" y="-32">Vale</text>
+          </g></g>
+          <g transform="translate(342,286)"><g class="persona" data-id="5" tabindex="0" role="button" aria-label="Descubrir a esta persona de la mesa">
+            <rect x="-34" y="-30" width="68" height="120" fill="transparent"/>
+            <circle r="23" fill="#FFA06B"/><path d="M-31 82c0-25 14-42 31-42s31 17 31 42z" fill="#FFA06B"/>
+            <g class="cara"><circle cx="-7.8" cy="-4.5" r="2.8"/><circle cx="7.8" cy="-4.5" r="2.8"/><path d="M-8.2 5.2q8.2 7.4 16.4 0" fill="none" stroke="#140A0D" stroke-width="2.5" stroke-linecap="round"/></g>
+            <text class="nombre" y="-32">Santi</text>
+          </g></g>
         </g>
       </svg>
+
+      <!-- Juego: tocá a cada persona para descubrirla -->
+      <div class="juego">
+        <p class="juego__pista" id="juego-pista">Tocá a cada persona de la mesa</p>
+        <div class="juego__ficha" id="juego-ficha" aria-live="polite"></div>
+      </div>
     </div>
   </div>
 </section>
@@ -888,13 +963,75 @@ button{font:inherit;color:inherit;background:none;border:none;cursor:pointer}
     }
   })();
 
-  /* La mesa se llena sola: las personas se sientan una por una */
+  /* La mesa se llena sola y después se vuelve jugable */
   (function(){
+    var MESA=[
+      {n:"Caro, 29",   bio:"Trabaja en una bodega de Maipú.",        tags:["🍷 Vino","🪕 Folclore","🎬 Series"]},
+      {n:"Nico, 34",   bio:"No se pierde un partido ni un asado.",   tags:["🍺 Cervecería","⚽ Fútbol","🎮 Juegos"]},
+      {n:"Flor, 26",   bio:"Estudia en la UNCuyo y dibuja de noche.",tags:["🎵 Música","✈️ Viajes","🎨 Arte"]},
+      {n:"Tomás, 31",  bio:"Los domingos se va a la montaña.",       tags:["🍷 Vino","🌄 Aire libre","📚 Libros"]},
+      {n:"Vale, 28",   bio:"Canta mejor después del segundo trago.", tags:["🍹 Cócteles","🎤 Karaoke","🎵 Música"]},
+      {n:"Santi, 35",  bio:"Conoce todos los bares de Godoy Cruz.",  tags:["🍔 Gastronomía","🎬 Series","⚽ Fútbol"]}
+    ];
+    var COMUNES=["🍷 Vino","🎵 Música","🎬 Series","⚽ Fútbol"];
+
     var gente=document.querySelectorAll(".persona");
+    var pista=document.getElementById("juego-pista");
+    var ficha=document.getElementById("juego-ficha");
+    var descubiertas=0;
+
     for(var i=0;i<gente.length;i++){
       (function(nodo,idx){
         setTimeout(function(){ nodo.classList.add("sentada"); }, menosMovimiento?0:(900+idx*220));
+        function descubrir(){
+          if(!nodo.classList.contains("sentada")) return;
+          if(!nodo.classList.contains("descubierta")){
+            nodo.classList.add("descubierta");
+            descubiertas++;
+          }
+          if(!menosMovimiento){
+            nodo.classList.remove("saluda");
+            void nodo.getBoundingClientRect();
+            nodo.classList.add("saluda");
+          }
+          mostrarFicha(MESA[idx]);
+          actualizarPista();
+        }
+        nodo.addEventListener("click",descubrir);
+        nodo.addEventListener("keydown",function(ev){
+          if(ev.key==="Enter"||ev.key===" "){ ev.preventDefault(); descubrir(); }
+        });
       })(gente[i],i);
+    }
+
+    function mostrarFicha(p){
+      limpiar(ficha);
+      var caja=el("div","ficha");
+      caja.appendChild(el("p","ficha__nombre",p.n));
+      caja.appendChild(el("p","ficha__bio",p.bio));
+      var tags=el("div","ficha__tags");
+      for(var t=0;t<p.tags.length;t++) tags.appendChild(el("span","ficha__tag",p.tags[t]));
+      caja.appendChild(tags);
+      ficha.appendChild(caja);
+    }
+
+    function actualizarPista(){
+      if(descubiertas>=gente.length){ pista.textContent="Mesa completa"; setTimeout(fichaFinal,900); }
+      else pista.textContent="Descubriste "+descubiertas+" de "+gente.length;
+    }
+
+    function fichaFinal(){
+      limpiar(ficha);
+      var caja=el("div","ficha ficha--final");
+      caja.appendChild(el("p","ficha__nombre","Esta podría ser tu mesa."));
+      caja.appendChild(el("p","ficha__bio","Seis personas que no se conocían. Esto es lo que tienen en común:"));
+      var tags=el("div","ficha__tags");
+      for(var c=0;c<COMUNES.length;c++) tags.appendChild(el("span","ficha__tag",COMUNES[c]));
+      caja.appendChild(tags);
+      var btn=el("button","btn btn--primario btn--bloque ficha__btn","Armá la tuya");
+      btn.addEventListener("click",function(){ abrirExperiencia(); });
+      caja.appendChild(btn);
+      ficha.appendChild(caja);
     }
   })();
 
